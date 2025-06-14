@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { LessonCard } from "@/components/LessonCard";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -42,9 +43,22 @@ const sampleLessons = [
 ];
 
 const Index = () => {
+  const navigate = useNavigate();
   const [userXP, setUserXP] = useState(290);
   const [dailyStreak, setDailyStreak] = useState(7);
   const [completedLessons, setCompletedLessons] = useState(12);
+
+  const handleLessonClick = (lesson: any) => {
+    // Map lesson titles to route IDs
+    const lessonRoutes: { [key: string]: string } = {
+      "Al-Fatiha": "al-fatiha",
+      "Al-Ikhlas": "al-ikhlas", 
+      "An-Nas": "an-nas"
+    };
+    
+    const lessonId = lessonRoutes[lesson.title] || lesson.title.toLowerCase();
+    navigate(`/lesson/${lessonId}`);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-100">
@@ -76,9 +90,7 @@ const Index = () => {
               <LessonCard
                 key={lesson.id}
                 lesson={lesson}
-                onClick={() => {
-                  console.log(`Starting lesson: ${lesson.title}`);
-                }}
+                onClick={() => handleLessonClick(lesson)}
               />
             ))}
           </div>
